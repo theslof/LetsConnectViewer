@@ -35,9 +35,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // MAke the button do something.
+        // Make the buttons do something.
         findViewById<Button>(R.id.buttonSignOut).setOnClickListener {
             auth.signOut()
+        }
+
+        findViewById<Button>(R.id.buttonProfile).setOnClickListener {
+            startActivity(UserProfileActivity.createIntent(this, user))
         }
 
     }
