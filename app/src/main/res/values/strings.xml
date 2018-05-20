@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Let\'s Connect Viewer</string>
+    <string name="hello_string">Hello %1$s!</string>
 </resources>

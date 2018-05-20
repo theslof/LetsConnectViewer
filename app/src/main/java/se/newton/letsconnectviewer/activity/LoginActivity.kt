@@ -1,4 +1,4 @@
-package se.newton.letsconnectviewer
+package se.newton.letsconnectviewer.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -7,7 +7,8 @@ import android.os.Bundle
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import se.newton.letsconnectviewer.BuildConfig
+import se.newton.letsconnectviewer.R
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
@@ -54,5 +55,6 @@ class LoginActivity : AppCompatActivity() {
     private fun launchMainActivity() {
         val user = auth.currentUser
         startActivity(MainActivity.createIntent(this, user))
+        finish()
     }
 }
