@@ -14,31 +14,30 @@ import java.util.*
 class LoginActivity : AppCompatActivity() {
     private val RC_SIGN_IN = 123 //the request code could be any Integer
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val providers: List<AuthUI.IdpConfig> = Arrays.asList(
+            // Add login providers here
+            // AuthUI.IdpConfig.GoogleBuilder().build(),
+            // AuthUI.IdpConfig.FacebookBuilder().build(),
+            AuthUI.IdpConfig.EmailBuilder().build()
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if (auth.currentUser != null) { //If user is signed in
+        if (auth.currentUser != null) {
+            //If user is signed in we launch MainActivity
             launchMainActivity()
         } else {
+            // Otherwise we display AuthUI sign in form
             startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setIsSmartLockEnabled(!BuildConfig.DEBUG)
-                            .setAvailableProviders(
-                                    Arrays.asList(
-                                            //AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
-                                            AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()))
-                            .setTosUrl("link to app terms and service")
-                            .setPrivacyPolicyUrl("link to app privacy policy")
+                            .setAvailableProviders(providers)
                             .build(),
                     RC_SIGN_IN)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
