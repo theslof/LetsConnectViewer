@@ -7,8 +7,11 @@ import android.os.Bundle
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import se.newton.letsconnectviewer.BuildConfig
 import se.newton.letsconnectviewer.R
+import se.newton.letsconnectviewer.model.User
+import se.newton.letsconnectviewer.service.Database
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
@@ -52,8 +55,21 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun launchMainActivity() {
-        val user = auth.currentUser
-        startActivity(MainActivity.createIntent(this, user))
-        finish()
+        val user: FirebaseUser? = auth.currentUser
+        if (user != null) {
+            Database.createUser(user.uid, { res ->
+                if (res != null) {
+                    if (res.email.isBlank())
+                        res.email = user.email ?: ""
+                    if (res.userName.isBlank())
+                        res.userName = user.displayName ?: ""
+                    Database.updateUser(res, { res ->
+                    })
+                }
+            })
+            startActivity(MainActivity.createIntent(this))
+            finish()
+
+        }
     }
 }

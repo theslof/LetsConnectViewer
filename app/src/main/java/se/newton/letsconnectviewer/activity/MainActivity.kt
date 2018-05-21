@@ -18,10 +18,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Read the user object passed as a parameter to the Intent...
-        val user = intent.extras["user"] as FirebaseUser
+        val user = auth.currentUser
+
         // ...and show their display name in the greeting.
-        findViewById<TextView>(R.id.textViewHello).text = getString(R.string.hello_string, user.displayName)
+        findViewById<TextView>(R.id.textViewHello).text = getString(R.string.hello_string, user?.displayName
+                ?: "Unknown")
 
         // Create a listener method that triggers if the user login state changes.
         // This is attached to an object so that we can register and unregister the listener.
@@ -41,7 +42,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.buttonProfile).setOnClickListener {
-            startActivity(UserProfileActivity.createIntent(this, user))
+            if (user != null)
+                startActivity(UserProfileActivity.createIntent(this, user.uid))
         }
 
     }
@@ -63,12 +65,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private val INTENT_USER = "user"
 
-        fun createIntent(context: Context, user: FirebaseUser?): Intent {
-            if (user == null)
-                throw IllegalArgumentException("User is not logged in")
-            val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra(INTENT_USER, user)
-            return intent
+        fun createIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
         }
     }
 }
