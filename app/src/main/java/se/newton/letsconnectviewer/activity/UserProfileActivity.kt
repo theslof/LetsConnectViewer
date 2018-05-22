@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import kotlinx.android.synthetic.main.activity_user_profile.*
 import se.newton.letsconnectviewer.R
 import se.newton.letsconnectviewer.model.User
 import se.newton.letsconnectviewer.service.Database
@@ -35,8 +36,9 @@ class UserProfileActivity : AppCompatActivity() {
                         )
                         .into(profileImageView)
 
-                textViewName.text = user.userName
+                textViewName.text = user.displayName
                 textViewEmail.text = user.email
+                textViewHighscore.text = user.highscore.toString()
             }
         })
     }

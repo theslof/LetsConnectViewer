@@ -4,18 +4,20 @@ import se.newton.letsconnectviewer.R
 
 class User() {
     var uid: String = ""
-    var userName: String = ""
+    var displayName: String = ""
     var email: String = ""
     var profileImage: String = ""
+    var highscore: Int = 0
 
     constructor(uid: String): this() {
         this.uid = uid
     }
 
     fun update(user: User){
-        this.userName = user.userName
+        this.displayName = user.displayName
         this.email = user.email
         this.profileImage = user.profileImage
+        this.highscore = user.highscore
     }
 
     companion object {

@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import se.newton.letsconnectviewer.BuildConfig
 import se.newton.letsconnectviewer.R
-import se.newton.letsconnectviewer.model.User
 import se.newton.letsconnectviewer.service.Database
 import java.util.*
 
@@ -61,8 +60,8 @@ class LoginActivity : AppCompatActivity() {
                 if (res != null) {
                     if (res.email.isBlank())
                         res.email = user.email ?: ""
-                    if (res.userName.isBlank())
-                        res.userName = user.displayName ?: ""
+                    if (res.displayName.isBlank())
+                        res.displayName = user.displayName ?: ""
                     Database.updateUser(res, { res ->
                     })
                 }
