@@ -9,11 +9,11 @@ class User() {
     var profileImage: String = "placeholder"
     var highscore: Int = 0
 
-    constructor(uid: String): this() {
+    constructor(uid: String) : this() {
         this.uid = uid
     }
 
-    fun update(user: User){
+    fun update(user: User) {
         this.displayName = user.displayName
         this.email = user.email
         this.profileImage = user.profileImage
@@ -21,8 +21,8 @@ class User() {
     }
 
     companion object {
-        fun getProfileImage(imageName: String) : Int {
-            return when(imageName){
+        fun getProfileImage(imageName: String): Int {
+            return when (imageName) {
                 "cat" -> R.drawable.avatar_cat
                 "chicken" -> R.drawable.avatar_chicken
                 "cow" -> R.drawable.avatar_cow

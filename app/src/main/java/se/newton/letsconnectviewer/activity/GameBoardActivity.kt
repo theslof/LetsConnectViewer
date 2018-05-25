@@ -1,6 +1,5 @@
 package se.newton.letsconnectviewer.activity
 
-import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -20,14 +19,14 @@ class GameBoardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game_board)
 
         gid = intent.getStringExtra(INTENT_GAME)
-        Database.getMoves(gid, { moves:List<Move>? ->
-            if(moves != null){
+        Database.getMoves(gid, { moves: List<Move>? ->
+            if (moves != null) {
                 this.moves = moves
             }
         })
 
-        Database.getGame(gid, { game:Game? ->
-            if(game != null){
+        Database.getGame(gid, { game: Game? ->
+            if (game != null) {
                 this.game = game
             }
         })
