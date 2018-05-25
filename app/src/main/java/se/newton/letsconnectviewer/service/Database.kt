@@ -126,7 +126,7 @@ class Database {
             val db: FirebaseFirestore = FirebaseFirestore.getInstance()
             Log.d(TAG, "Fetching moves for game $gid")
 
-            db.collection("Games").document(gid).collection("Moves").get().addOnCompleteListener { task ->
+            db.collection("Games").document(gid).collection("Moves").orderBy("move").get().addOnCompleteListener { task ->
                 Log.d(TAG, "Fetching completed")
                 if (task.isSuccessful) {
                     Log.d(TAG, "Fetching successful")

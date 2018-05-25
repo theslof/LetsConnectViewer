@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.buttonProfile).setOnClickListener {
             if (user != null)
-                startActivity(UserProfileActivity.createIntent(this, user.uid))
+                startActivity(GameBoardActivity.createIntent(this, "CGtYOC62pZMd4xDkezko"))
         }
 
     }
