@@ -1,6 +1,7 @@
 package se.newton.letsconnectviewer.service
 
 import android.util.Log
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -136,6 +137,35 @@ class Database {
                     Log.d(TAG, task.exception.toString())
                     onCompleteCallback(null)
                 }
+            }
+        }
+
+        fun getGames(uid: String, onCompleteCallback: (List<Game>) -> Unit) {
+            val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+            Log.d(TAG, "Fetching games for user $uid")
+
+            val q1 = db.collection("Games").whereEqualTo("player1", uid).get()
+            val q2 = db.collection("Games").whereEqualTo("player2", uid).get()
+
+            var l1: List<Game>
+            var l2: List<Game>
+            val games = ArrayList<Game>()
+
+            q1.addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    games.addAll(task.result.toObjects(Game::class.java))
+                }
+
+                if(q2.isComplete)
+                    onCompleteCallback(games)
+            }
+            q2.addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    games.addAll(task.result.toObjects(Game::class.java))
+                }
+
+                if(q1.isComplete)
+                    onCompleteCallback(games)
             }
         }
     }

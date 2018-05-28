@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:16.0.0'
     // FirebaseUI for Firebase Auth
     implementation 'com.firebaseui:firebase-ui-auth:3.3.1'
+    implementation 'com.firebaseui:firebase-ui-firestore:3.2.2'
     // Glide for images
     implementation 'com.github.bumptech.glide:glide:4.6.1'
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import se.newton.letsconnectviewer.R
+import se.newton.letsconnectviewer.adapter.FirebaseGameAdapter
 import se.newton.letsconnectviewer.model.User
 import se.newton.letsconnectviewer.service.Database
 
@@ -20,9 +22,9 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
-        val profileImageView: ImageView = findViewById<ImageView>(R.id.imageViewProfile)
-        val textViewName: TextView = findViewById<TextView>(R.id.textViewDisplayName)
-        val textViewEmail: TextView = findViewById<TextView>(R.id.textViewEmailAddress)
+        val profileImageView: ImageView = findViewById(R.id.imageViewProfile)
+        val textViewName: TextView = findViewById(R.id.textViewDisplayName)
+        val textViewEmail: TextView = findViewById(R.id.textViewEmailAddress)
         val uid = intent.getStringExtra(INTENT_USER)
 
         Database.getUser(uid, { user ->

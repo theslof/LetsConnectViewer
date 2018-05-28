@@ -4,10 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.widget.Button
+import android.widget.ScrollView
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import se.newton.letsconnectviewer.R
+import se.newton.letsconnectviewer.adapter.FirebaseGameAdapter
+import se.newton.letsconnectviewer.service.Database
 
 class MainActivity : AppCompatActivity() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -18,10 +22,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val user = auth.currentUser
+        val uid: String = user?.uid ?: ""
 
         // ...and show their display name in the greeting.
-        findViewById<TextView>(R.id.textViewHello).text = getString(R.string.hello_string, user?.displayName
-                ?: "Unknown")
+        findViewById<TextView>(R.id.textViewDisplayName).text = user?.displayName ?: "Unknown"
 
         // Create a listener method that triggers if the user login state changes.
         // This is attached to an object so that we can register and unregister the listener.
@@ -42,8 +46,15 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.buttonProfile).setOnClickListener {
             if (user != null)
-                startActivity(GameBoardActivity.createIntent(this, "CGtYOC62pZMd4xDkezko"))
+                startActivity(UserProfileActivity.createIntent(this, user.uid))
         }
+        val recyclerView: RecyclerView = findViewById(R.id.gameList)
+        recyclerView.setHasFixedSize(true)
+        findViewById<ScrollView>(R.id.scrollView)
+        Database.getGames(uid, { games ->
+            recyclerView.adapter = FirebaseGameAdapter(games)
+        })
+
 
     }
 
