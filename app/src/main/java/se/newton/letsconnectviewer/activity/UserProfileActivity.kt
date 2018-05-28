@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,9 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import se.newton.letsconnectviewer.R
-import se.newton.letsconnectviewer.adapter.FirebaseGameAdapter
 import se.newton.letsconnectviewer.model.User
-import se.newton.letsconnectviewer.service.Database
+import se.newton.letsconnectviewer.service.UserManager
 
 class UserProfileActivity : AppCompatActivity() {
 
@@ -27,22 +25,19 @@ class UserProfileActivity : AppCompatActivity() {
         val textViewEmail: TextView = findViewById(R.id.textViewEmailAddress)
         val uid = intent.getStringExtra(INTENT_USER)
 
-        Database.getUser(uid, { user ->
-            Log.d("UserProfileActivity", "getUser()")
-            if (user != null) {
-                Glide.with(profileImageView)
-                        .load(User.getProfileImage(user.profileImage))
-                        .apply(
-                                RequestOptions()
-                                        .placeholder(R.drawable.ic_profile_image_placeholder_circular)
-                        )
-                        .into(profileImageView)
+        val user = UserManager.getUser(uid)
+        Log.d("UserProfileActivity", "getUser()")
+        Glide.with(profileImageView)
+                .load(User.getProfileImage(user.profileImage))
+                .apply(
+                        RequestOptions()
+                                .placeholder(R.drawable.ic_profile_image_placeholder_circular)
+                )
+                .into(profileImageView)
 
-                textViewName.text = user.displayName
-                textViewEmail.text = user.email
-                textViewHighscore.text = user.highscore.toString()
-            }
-        })
+        textViewName.text = user.displayName
+        textViewEmail.text = user.email
+        textViewHighscore.text = user.highscore.toString()
     }
 
 

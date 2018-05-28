@@ -6,26 +6,22 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.widget.Button
-import android.widget.ScrollView
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import se.newton.letsconnectviewer.R
 import se.newton.letsconnectviewer.adapter.FirebaseGameAdapter
+import se.newton.letsconnectviewer.model.User
 import se.newton.letsconnectviewer.service.Database
+import se.newton.letsconnectviewer.service.UserManager
 
 class MainActivity : AppCompatActivity() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var onAuthChangeListener: FirebaseAuth.AuthStateListener
+    private val user: User = UserManager.getUser(auth.currentUser?.uid ?: "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val user = auth.currentUser
-        val uid: String = user?.uid ?: ""
-
-        // ...and show their display name in the greeting.
-        findViewById<TextView>(R.id.textViewDisplayName).text = user?.displayName ?: "Unknown"
 
         // Create a listener method that triggers if the user login state changes.
         // This is attached to an object so that we can register and unregister the listener.
@@ -45,14 +41,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.buttonProfile).setOnClickListener {
-            if (user != null)
-                startActivity(UserProfileActivity.createIntent(this, user.uid))
+            startActivity(UserProfileActivity.createIntent(this, user.uid))
         }
         val recyclerView: RecyclerView = findViewById(R.id.gameList)
         recyclerView.setHasFixedSize(true)
-        findViewById<ScrollView>(R.id.scrollView)
-        Database.getGames(uid, { games ->
+
+        Database.getGames(user.uid, { games ->
             recyclerView.adapter = FirebaseGameAdapter(games)
+            findViewById<TextView>(R.id.textViewDisplayName).text = user.displayName
         })
 
 
@@ -73,8 +69,6 @@ class MainActivity : AppCompatActivity() {
     // This is similar to statics in Java. It can be addressed from any other class
     // through MainActivity.createIntent(context, user)
     companion object {
-        private val INTENT_USER = "user"
-
         fun createIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }

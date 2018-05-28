@@ -4,13 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import se.newton.letsconnectviewer.BuildConfig
 import se.newton.letsconnectviewer.R
+import se.newton.letsconnectviewer.model.User
 import se.newton.letsconnectviewer.service.Database
+import se.newton.letsconnectviewer.service.UserManager
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
@@ -27,19 +30,22 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if (auth.currentUser != null) {
-            //If user is signed in we launch MainActivity
-            launchMainActivity()
-        } else {
-            // Otherwise we display AuthUI sign in form
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setIsSmartLockEnabled(!BuildConfig.DEBUG)
-                            .setAvailableProviders(providers)
-                            .build(),
-                    RC_SIGN_IN)
-        }
+        //If user is signed in we launch MainActivity
+        if (auth.currentUser != null) launchMainActivity()
+        // Otherwise we display AuthUI sign in form
+        else showSignInPopup()
+
+        findViewById<Button>(R.id.buttonSignIn).setOnClickListener { showSignInPopup() }
+    }
+
+    private fun showSignInPopup() {
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setIsSmartLockEnabled(!BuildConfig.DEBUG)
+                        .setAvailableProviders(providers)
+                        .build(),
+                RC_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -59,16 +65,14 @@ class LoginActivity : AppCompatActivity() {
             Database.createUser(user.uid, { res ->
                 if (res != null) {
                     if (res.email.isBlank())
-                        res.email = user.email ?: ""
+                        res.email = user.email ?: "anon@anon.anon"
                     if (res.displayName.isBlank())
-                        res.displayName = user.displayName ?: ""
-                    Database.updateUser(res, { res ->
-                    })
+                        res.displayName = user.displayName ?: "Anonymous"
+                    Database.updateUser(res, {UserManager.getUser(user.uid)})
                 }
             })
             startActivity(MainActivity.createIntent(this))
             finish()
-
         }
     }
 }
