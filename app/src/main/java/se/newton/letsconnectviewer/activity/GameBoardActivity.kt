@@ -4,12 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintSet
 import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.Toolbar
-import android.view.View
-import android.widget.ImageView
 import se.newton.letsconnectviewer.R
 import se.newton.letsconnectviewer.model.Game
 import se.newton.letsconnectviewer.model.Move
@@ -18,7 +14,11 @@ import android.util.TypedValue
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.widget.GridLayout
+import android.widget.ImageView
 import android.widget.SeekBar
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import se.newton.letsconnectviewer.model.User
 import se.newton.letsconnectviewer.service.UserManager
 
 
@@ -103,11 +103,38 @@ class GameBoardActivity : AppCompatActivity() {
             if (game != null) {
                 this.game = game
 
-                val p1: String = UserManager.getUser(game.player1).displayName
-                val p2: String = if (game.type == "local") game.player2
-                else UserManager.getUser(game.player2).displayName
+                val profile1 = findViewById<ImageView>(R.id.imageViewProfile1)
+                val profile2 = findViewById<ImageView>(R.id.imageViewProfile2)
 
-                supportActionBar?.title = "$p1 vs. $p2"
+                val p1: User = UserManager.getUser(game.player1)
+                Glide.with(this)
+                        .load(User.getProfileImage(p1.profileImage))
+                        .apply(
+                                RequestOptions()
+                                        .placeholder(R.drawable.ic_profile_image_placeholder_circular)
+                        )
+                        .into(profile1)
+                profile1.setOnClickListener {
+                    startActivity(UserProfileActivity.createIntent(this, p1.uid))
+                }
+
+                val p2: String = if (game.type == "local") game.player2
+                else {
+                    val u = UserManager.getUser(game.player2)
+                    Glide.with(this)
+                            .load(User.getProfileImage(u.profileImage))
+                            .apply(
+                                    RequestOptions()
+                                            .placeholder(R.drawable.ic_profile_image_placeholder_circular)
+                            )
+                            .into(profile2)
+                    profile2.setOnClickListener {
+                        startActivity(UserProfileActivity.createIntent(this, u.uid))
+                    }
+                    u.displayName
+                }
+
+                supportActionBar?.title = "${p1.displayName} vs. $p2"
             }
         })
 
@@ -128,7 +155,7 @@ class GameBoardActivity : AppCompatActivity() {
     }
 
     private fun redrawPlayfield(progress: Int) {
-        if(progress < 0 || progress > moves.size)
+        if (progress < 0 || progress > moves.size)
             return
         val forward = progress > move
         var state = move

@@ -144,29 +144,18 @@ class Database {
             val db: FirebaseFirestore = FirebaseFirestore.getInstance()
             Log.d(TAG, "Fetching games for user $uid")
 
-            val q1 = db.collection("Games").whereEqualTo("player1", uid).get()
-            val q2 = db.collection("Games").whereEqualTo("player2", uid).get()
-
-            var l1: List<Game>
-            var l2: List<Game>
-            val games = ArrayList<Game>()
-
-            q1.addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    games.addAll(task.result.toObjects(Game::class.java))
+            db.collection("Games").whereEqualTo(uid, true).get().addOnCompleteListener { task ->
+                Log.d(TAG, "Fetching completed")
+                if (task.isSuccessful) {
+                    Log.d(TAG, "Fetching successful")
+                    val query: QuerySnapshot = task.result
+                    onCompleteCallback(query.toObjects(Game::class.java))
+                } else {
+                    Log.d(TAG, task.exception.toString())
+                    onCompleteCallback(ArrayList())
                 }
-
-                if(q2.isComplete)
-                    onCompleteCallback(games)
             }
-            q2.addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    games.addAll(task.result.toObjects(Game::class.java))
-                }
 
-                if(q1.isComplete)
-                    onCompleteCallback(games)
-            }
         }
     }
 }
