@@ -5,6 +5,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.widget.Button
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
@@ -18,10 +19,14 @@ class MainActivity : AppCompatActivity() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var onAuthChangeListener: FirebaseAuth.AuthStateListener
     private val user: User = UserManager.getUser(auth.currentUser?.uid ?: "")
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         // Create a listener method that triggers if the user login state changes.
         // This is attached to an object so that we can register and unregister the listener.
@@ -48,7 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         Database.getGames(user.uid, { games ->
             recyclerView.adapter = FirebaseGameAdapter(games)
-            findViewById<TextView>(R.id.textViewDisplayName).text = user.displayName
         })
 
 
@@ -58,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         auth.addAuthStateListener(onAuthChangeListener)
+        findViewById<TextView>(R.id.textViewDisplayName).text = user.displayName
     }
 
     override fun onStop() {

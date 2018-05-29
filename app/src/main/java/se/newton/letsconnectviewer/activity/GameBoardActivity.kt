@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.constraint.ConstraintSet
+import android.support.v7.widget.AppCompatImageButton
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.ImageView
 import se.newton.letsconnectviewer.R
@@ -17,6 +19,7 @@ import android.util.DisplayMetrics
 import android.view.Gravity
 import android.widget.GridLayout
 import android.widget.SeekBar
+import se.newton.letsconnectviewer.service.UserManager
 
 
 class GameBoardActivity : AppCompatActivity() {
@@ -34,13 +37,22 @@ class GameBoardActivity : AppCompatActivity() {
     private val grid: ArrayList<ImageView> = ArrayList()
     private lateinit var playfield: GridLayout
     private lateinit var seekBar: SeekBar
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_board)
+
         playfield = findViewById(R.id.layoutPlayfield)
         seekBar = findViewById(R.id.seekBar)
         seekBar.isEnabled = false
+
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        toolbar.setNavigationOnClickListener { finish() }
 
         // Take the Game data from the Intent
         gid = intent.getStringExtra(INTENT_GAME)
@@ -90,6 +102,12 @@ class GameBoardActivity : AppCompatActivity() {
         Database.getGame(gid, { game: Game? ->
             if (game != null) {
                 this.game = game
+
+                val p1: String = UserManager.getUser(game.player1).displayName
+                val p2: String = if (game.type == "local") game.player2
+                else UserManager.getUser(game.player2).displayName
+
+                supportActionBar?.title = "$p1 vs. $p2"
             }
         })
 
@@ -104,9 +122,14 @@ class GameBoardActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(p0: SeekBar?) {}
 
         })
+
+        findViewById<AppCompatImageButton>(R.id.buttonPrevious).setOnClickListener { redrawPlayfield(move - 1) }
+        findViewById<AppCompatImageButton>(R.id.buttonNext).setOnClickListener { redrawPlayfield(move + 1) }
     }
 
     private fun redrawPlayfield(progress: Int) {
+        if(progress < 0 || progress > moves.size)
+            return
         val forward = progress > move
         var state = move
         while (progress != state) {
@@ -120,6 +143,7 @@ class GameBoardActivity : AppCompatActivity() {
             }
         }
         move = progress
+        seekBar.progress = progress
     }
 
     companion object {

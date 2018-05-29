@@ -6,7 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".activity.UserProfileActivity">
 
-    <ImageView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageViewProfile"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -15,9 +30,9 @@
         android:contentDescription="Avatar"
         android:src="@drawable/ic_profile_image_placeholder_circular"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbarContainer" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewDisplayName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +45,7 @@
         app:layout_constraintTop_toTopOf="@+id/imageViewProfile"
         tools:text="DISPLAY_NAME" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewEmailAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewDisplayName"
         tools:text="EMAIL_ADDRESS" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,7 +66,7 @@
         app:layout_constraintStart_toStartOf="@+id/textViewEmailAddress"
         app:layout_constraintTop_toBottomOf="@+id/textViewEmailAddress" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewHighscore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
