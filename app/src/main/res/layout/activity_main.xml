@@ -21,25 +21,26 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/textViewHello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Hello"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbarContainer" />
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageViewProfile"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_profile_image_placeholder_circular"
+        app:layout_constraintTop_toBottomOf="@id/toolbarContainer"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewDisplayName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewHello"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewProfile"
+        app:layout_constraintLeft_toRightOf="@id/imageViewProfile"
+        app:layout_constraintTop_toTopOf="@id/imageViewProfile"
         tools:text="DISPLAY_NAME" />
 
 
@@ -48,11 +49,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/darker_gray"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@id/buttonBox"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDisplayName">
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfile">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/gameList"
@@ -70,14 +71,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/buttonProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@color/colorLight"
-            android:text="View Profile" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/buttonSignOut"

@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import se.newton.letsconnectviewer.R
 import se.newton.letsconnectviewer.adapter.FirebaseGameAdapter
@@ -45,9 +47,11 @@ class MainActivity : AppCompatActivity() {
             auth.signOut()
         }
 
-        findViewById<Button>(R.id.buttonProfile).setOnClickListener {
+        val profileImage: ImageView = findViewById(R.id.imageViewProfile)
+        profileImage.setOnClickListener {
             startActivity(UserProfileActivity.createIntent(this, user.uid))
         }
+
         val recyclerView: RecyclerView = findViewById(R.id.gameList)
         recyclerView.setHasFixedSize(true)
 
@@ -55,7 +59,14 @@ class MainActivity : AppCompatActivity() {
             recyclerView.adapter = FirebaseGameAdapter(games)
         })
 
-
+        Database.getUser(user.uid, { u ->
+            if(u != null) {
+                Glide.with(this)
+                        .load(User.getProfileImage(u.profileImage))
+                        .into(profileImage)
+                findViewById<TextView>(R.id.textViewDisplayName).text = u.displayName
+            }
+        })
     }
 
     override fun onStart() {
