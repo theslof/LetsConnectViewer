@@ -54,11 +54,11 @@ class FirebaseGameAdapter(private val dataset: List<Game>) : RecyclerView.Adapte
 
             if (game.activePlayer == 0)
                 Glide.with(view)
-                        .load(R.drawable.ic_coin_red)
+                        .load(R.drawable.ic_coin_yellow)
                         .into(coin1)
             else
                 Glide.with(view)
-                        .load(R.drawable.ic_coin_yellow)
+                        .load(R.drawable.ic_coin_red)
                         .into(coin2)
 
             if (game.player1 != uid)

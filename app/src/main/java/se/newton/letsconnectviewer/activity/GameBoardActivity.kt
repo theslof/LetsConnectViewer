@@ -165,7 +165,7 @@ class GameBoardActivity : AppCompatActivity() {
                 grid[moves[state].y * GRID_WIDTH + moves[state].x].setImageResource(COIN_NONE)
             } else {
                 grid[moves[state].y * GRID_WIDTH + moves[state].x]
-                        .setImageResource(if (moves[state].player == 0) COIN_RED else COIN_YELLOW)
+                        .setImageResource(if (moves[state].player == 0) COIN_YELLOW else COIN_RED)
                 state++
             }
         }

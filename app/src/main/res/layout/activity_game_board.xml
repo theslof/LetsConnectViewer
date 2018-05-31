@@ -38,7 +38,7 @@
                 android:layout_height="92dp"
                 android:padding="4dp"
                 android:src="@drawable/ic_profile_image_placeholder_circular"
-                android:background="@drawable/ic_coin_red"
+                android:background="@drawable/ic_coin_yellow"
                 app:layout_constraintBottom_toTopOf="@id/layoutPlayfield"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +49,7 @@
                 android:layout_height="92dp"
                 android:padding="4dp"
                 android:src="@drawable/ic_profile_image_placeholder_circular"
-                android:background="@drawable/ic_coin_yellow"
+                android:background="@drawable/ic_coin_red"
                 app:layout_constraintBottom_toTopOf="@id/layoutPlayfield"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
